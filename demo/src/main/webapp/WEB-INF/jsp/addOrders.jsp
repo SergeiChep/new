@@ -15,10 +15,10 @@
 <link href="<c:url value='/static/css/app.css' />" rel="stylesheet"></link>
 </head>
 <body>
-	<form class="form-horizontal">
+	<form class="form-horizontal" method="post">
 		Select orders: <br>
 		<c:forEach items="${orders}" var="order">
-			<input type="checkbox" id="orders" name="${order.id}"
+			<input type="checkbox" id="cb-order-${order.address}" name="orders[]"
 				value="${order.address}" />
 			<label>${order.address}</label>
 			<br>
@@ -27,7 +27,7 @@
 		<div class="row">
 			<div class="form-actions floatRight">
 
-				<input type="submit" value="Add" class="btn btn-primary btn-sm" />
+				 <button type="submit" class="btn btn-primary btn-sm">Add</button>
 				or <a href="<c:url value='/flightsList' />">Cancel</a>
 			</div>
 		</div>

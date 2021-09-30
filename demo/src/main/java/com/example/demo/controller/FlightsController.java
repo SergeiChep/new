@@ -36,33 +36,7 @@ public class FlightsController {
 	@Autowired
 	OrderRespository orderRepository;
 
-	@RequestMapping(value = { "/addorders-{id}" }, method = RequestMethod.GET)
-	public String addOrders(ModelMap model, @PathVariable int id, List<Order> orders) {
-
-		model.addAttribute("flightId", id);
-		model.addAttribute("orders", orderRepository.findAll());
-		model.addAttribute("edit", false);
-
-		return "addOrders";
-
-	}
-
-	@RequestMapping(value = { "/addorders-{id}" }, method = RequestMethod.POST)
-	public String saveOrders(@PathVariable int id, BindingResult result, ModelMap model,
-			@ModelAttribute("orders") List<Order> orders) {
-
-		if (result.hasErrors()) {
-			return "addOrders";
-		}
-
-		orderRepository.saveAll(orders);
-
-		// model.addAttribute("success", "User " + user.getFirstName() + " "+
-		// user.getLastName() + " registered successfully");
-
-		// return "success";
-		return "flightsList";
-	}
+	
 
 	@RequestMapping(value = { "/newflight" }, method = RequestMethod.GET)
 	public String newFlight(ModelMap model) {
@@ -142,33 +116,35 @@ public class FlightsController {
 	}
 
 	@RequestMapping(value = { "/add-orders-{id}" }, method = RequestMethod.GET)
-	public String addOrders(@PathVariable int id, ModelMap model, HttpServletRequest req) {
+	public String addOrders(@PathVariable int id, ModelMap model) {
 	
 		model.addAttribute("flightId", id);
 		model.addAttribute("orders", orderRepository.findAll());
 		model.addAttribute("edit", true);
-		req.getParameter("orders");
+		
 		return "addOrders";
 	}
 
-//	@RequestMapping(value = { "/add-orders-{id}" }, method = RequestMethod.POST)
-//	public String addOrders(BindingResult result, ModelMap model, @PathVariable int id, HttpServletRequest req) {
-//		
-//		if (result.hasErrors()) {
-//			return "addOrders";
-//		}
-//		String [] orders =req.getParameterValues("orders[]");
-//		for (Order order: orders) {
-//			order.getFlight().setId(id);
-//			
-//		}
-//		orderRepository.saveAll(orders);
-//		flightRespository.findAll();
-//		
-//		
-//
-//		return "flightsList";
-//	}
+	@RequestMapping(value = { "/add-orders-{id}" }, method = RequestMethod.POST)
+	public String addOrders(ModelMap model, @PathVariable int id, HttpServletRequest req) {
+		
+		
+		String[] checked = req.getParameterValues("orders[]");
+		Flight flight = flightRespository.getById(id);
+		if (checked != null) {
+		for (String orderAddress: checked) {
+			Order order = orderRepository.findByAddress(orderAddress);
+			order.setFlight(flight);
+			orderRepository.save(order);
+		}
+		
+		
+						
+	}
+		model.addAttribute("flights", flightRespository.findAll());
+		
+		return "flightsList";
+	}
 	
 	
 	

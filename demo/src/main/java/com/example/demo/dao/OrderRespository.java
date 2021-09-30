@@ -13,6 +13,7 @@ import com.example.demo.model.Order;
 public interface OrderRespository extends JpaRepository<Order, Integer>{
 	
 	List<Order> findByClient(String text);
-	List<Order> findByFlight(String text);
+	
+	Order findByAddress(String text);
 
 }

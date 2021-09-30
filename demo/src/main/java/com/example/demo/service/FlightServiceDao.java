@@ -7,5 +7,6 @@ import com.example.demo.model.Flight;
 @Service
 public interface FlightServiceDao {
 	Flight completeFlight(int id);
+	
 
 }
